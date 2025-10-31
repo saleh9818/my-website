@@ -1,0 +1,2515 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>برنامه جامع تحقیق در عملیات</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: rgba(108, 99, 255, 0.85);
+            --secondary-color: rgba(78, 67, 118, 0.85);
+            --accent-color: rgba(255, 101, 132, 0.85);
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            --dark-text: #2c3e50;
+            --light-text: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Vazir', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-text);
+            line-height: 1.8;
+            background-image: url('https://vru.ac.ir/images/headers/research_assistant.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: -1;
+        }
+        
+        .persian-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 20px;
+            box-shadow: var(--glass-shadow);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: var(--glass-border);
+            animation: fadeInDown 1s ease;
+        }
+        
+        .persian-card {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            box-shadow: var(--glass-shadow);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: var(--glass-border);
+            margin-bottom: 2rem;
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+        
+        .persian-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .persian-card-header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            border-bottom: var(--glass-border);
+        }
+        
+        .persian-btn {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 50px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+            transition: all 0.3s ease;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .persian-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0.3),
+                rgba(255, 255, 255, 0)
+            );
+            transform: rotate(30deg);
+            transition: all 0.5s ease;
+        }
+        
+        .persian-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(108, 99, 255, 0.4);
+            color: white;
+        }
+        
+        .persian-btn:hover::after {
+            left: 100%;
+        }
+        
+        .network-flow-btn {
+            background: linear-gradient(to right, #9b59b6, #8e44ad);
+            border: none;
+            border-radius: 50px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+            transition: all 0.3s ease;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .network-flow-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(155, 89, 182, 0.4);
+            color: white;
+        }
+        
+        .dummy-node-btn {
+            background: linear-gradient(to right, #f39c12, #e67e22);
+            border: none;
+            border-radius: 50px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+            transition: all 0.3s ease;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dummy-node-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
+            color: white;
+        }
+        
+        .persian-input {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50px;
+            padding: 0.75rem 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .persian-input:focus {
+            background: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(108, 99, 255, 0.25);
+        }
+        
+        .table-responsive {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--glass-shadow);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table th {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: 600;
+            border-bottom: var(--glass-border);
+        }
+        
+        .table td, .table th {
+            vertical-align: middle;
+            text-align: center;
+            padding: 1rem;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .highlight-cell {
+            background-color: rgba(255, 101, 132, 0.25) !important;
+            font-weight: bold;
+            color: var(--accent-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .step-box {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--glass-shadow);
+            border-right: 4px solid var(--primary-color);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: var(--glass-border);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-left: 10px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .total-cost-box {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            box-shadow: var(--glass-shadow);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: var(--glass-border);
+            animation: pulse 2s infinite;
+        }
+        
+        .creator-info {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 1rem;
+            margin-top: 2rem;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: var(--glass-border);
+        }
+        
+        /* استایل‌های مخصوص برنامه شبکه سیمپلکس */
+        .graph-display {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: var(--glass-border);
+        }
+        
+        .result-box {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            min-height: 150px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: var(--glass-border);
+        }
+        
+        .path-item {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-right: 3px solid var(--primary-color);
+        }
+        
+        .path-cost {
+            background: var(--accent-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .shortest-path {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: var(--glass-border);
+        }
+        
+        .node {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 50%;
+            margin: 0 15px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .edge {
+            display: inline-block;
+            width: 80px;
+            height: 3px;
+            background: var(--dark-text);
+            margin: 0 5px;
+            position: relative;
+        }
+        
+        .edge-cost {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+        }
+        
+        /* استایل‌های مخصوص برنامه جریان در شبکه */
+        .network-display {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: var(--glass-border);
+        }
+        
+        .node.supply {
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+        }
+        
+        .node.demand {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+        }
+        
+        .capacity {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            color: #e74c3c;
+        }
+        
+        .instructions {
+            background: rgba(255, 249, 230, 0.8);
+            padding: 15px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border-right: 4px solid #f1c40f;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: var(--glass-border);
+        }
+        
+        .instructions h3 {
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ol {
+            padding-right: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        /* استایل‌های دکمه‌های اصلی */
+        .main-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .main-btn {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 2.5rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+            transition: all 0.3s ease;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            font-size: 1.1rem;
+        }
+        
+        .main-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0.3),
+                rgba(255, 255, 255, 0)
+            );
+            transform: rotate(30deg);
+            transition: all 0.5s ease;
+        }
+        
+        .main-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(108, 99, 255, 0.4);
+            color: white;
+        }
+        
+        .main-btn:hover::after {
+            left: 100%;
+        }
+        
+        /* استایل‌های جدید برای نمایش درختی شاخه‌ای */
+        .tree-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            overflow: auto;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: var(--glass-border);
+            min-height: 500px;
+        }
+        
+        .tree {
+            position: relative;
+            min-height: 400px;
+            width: 100%;
+        }
+        
+        .tree-node {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            transition: all 0.3s ease;
+            text-align: center;
+            padding: 5px;
+        }
+        
+        .tree-node:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .tree-node.start {
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+        }
+        
+        .tree-node.end {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+        }
+        
+        .tree-node.current {
+            background: linear-gradient(to right, #f39c12, #e67e22);
+            animation: pulse 1.5s infinite;
+        }
+        
+        .tree-connection {
+            position: absolute;
+            background: var(--dark-text);
+            z-index: 1;
+            transform-origin: 0 0;
+        }
+        
+        .tree-label {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            z-index: 3;
+        }
+        
+        .node-info {
+            font-size: 0.7rem;
+            margin-top: 2px;
+            opacity: 0.9;
+        }
+        
+        .tree-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        /* استایل‌های جدید برای نمایش همه مسیرها */
+        .all-paths-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: var(--glass-border);
+        }
+        
+        .path-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-right: 3px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .path-row:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .path-row.optimal {
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            color: white;
+            border-right: 3px solid #27ae60;
+        }
+        
+        .path-nodes {
+            font-weight: bold;
+        }
+        
+        .path-cost {
+            background: var(--accent-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .optimal-cost {
+            background: white;
+            color: #2ecc71;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        /* Responsive adjustments */
+        @media (min-width: 1400px) {
+            .container {
+                max-width: 1200px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .persian-header {
+                border-radius: 15px;
+                padding: 1.5rem 0;
+            }
+            
+            .main-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .main-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .tree-node {
+                width: 60px;
+                height: 60px;
+                font-size: 0.9rem;
+            }
+            
+            .node-info {
+                font-size: 0.6rem;
+            }
+            
+            .path-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .path-cost {
+                margin-top: 5px;
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="persian-header text-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-3 floating">
+                <i class="fas fa-calculator me-2"></i>برنامه جامع تحقیق در عملیات
+            </h1>
+            <p class="lead mb-0">شبکه سیمپلکس، مسئله حمل و نقل، جریان در شبکه و نمایش گراف درختی شاخه‌ای</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-buttons">
+            <button id="simplexBtn" class="btn main-btn">
+                <i class="fas fa-project-diagram me-2"></i>شبکه سیمپلکس
+            </button>
+            <button id="transportationBtn" class="btn main-btn">
+                <i class="fas fa-truck me-2"></i>مسئله حمل و نقل
+            </button>
+            <button id="networkFlowBtn" class="btn network-flow-btn">
+                <i class="fas fa-network-wired me-2"></i>جریان در شبکه
+            </button>
+            <button id="graphBtn" class="btn main-btn">
+                <i class="fas fa-sitemap me-2"></i>گراف درختی شاخه‌ای
+            </button>
+        </div>
+
+        <!-- بخش شبکه سیمپلکس -->
+        <div id="simplexSection">
+            <div class="persian-card">
+                <div class="card-header persian-card-header d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-cog me-2"></i>تنظیمات شبکه سیمپلکس</span>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="node-count" class="form-label">تعداد گره‌ها</label>
+                            <input type="number" id="node-count" min="2" max="20" value="6" class="form-control persian-input">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="start-node" class="form-label">گره شروع</label>
+                            <select id="start-node" class="form-control persian-input">
+                                <option value="1">گره 1</option>
+                                <option value="2">گره 2</option>
+                                <option value="3">گره 3</option>
+                                <option value="4">گره 4</option>
+                                <option value="5">گره 5</option>
+                                <option value="6">گره 6</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="end-node" class="form-label">گره پایان</label>
+                            <select id="end-node" class="form-control persian-input">
+                                <option value="1">گره 1</option>
+                                <option value="2">گره 2</option>
+                                <option value="3">گره 3</option>
+                                <option value="4">گره 4</option>
+                                <option value="5">گره 5</option>
+                                <option value="6">گره 6</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">تعریف مسیرها و هزینه‌ها (x<sub>ij</sub>, C):</label>
+                            <div id="edges-container" class="mt-3">
+                                <!-- Edge inputs will be dynamically generated here -->
+                            </div>
+                        </div>
+                        <div class="col-12 text-center mt-3">
+                            <button id="calculate-btn" class="btn persian-btn">
+                                <i class="fas fa-calculator me-2"></i>محاسبه کوتاهترین مسیر
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="persian-card">
+                <div class="card-header persian-card-header">
+                    <i class="fas fa-project-diagram me-2"></i>نمایش گراف
+                </div>
+                <div class="card-body">
+                    <div class="graph-display">
+                        <div id="graph-visual">
+                            <!-- Graph visualization will be dynamically generated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="simplex-result" style="display: none;">
+                <div class="persian-card">
+                    <div class="card-header persian-card-header">
+                        <i class="fas fa-list-ol me-2"></i>نتایج محاسبات شبکه سیمپلکس
+                    </div>
+                    <div class="card-body">
+                        <div class="result-box">
+                            <h4>همه مسیرهای ممکن:</h4>
+                            <div id="all-paths" class="all-paths-container">
+                                <!-- All possible paths will be displayed here -->
+                            </div>
+                        </div>
+                        
+                        <div id="shortest-path-result" class="shortest-path">
+                            کوتاهترین مسیر و مقدار آن در اینجا نمایش داده می‌شود
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- بخش مسئله حمل و نقل -->
+        <div id="transportationSection" style="display: none;">
+            <div class="persian-card">
+                <div class="card-header persian-card-header d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-table me-2"></i>تنظیمات مسئله حمل و نقل</span>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="rows" class="form-label">تعداد عرضه‌کنندگان (سطرها)</label>
+                            <input type="number" id="rows" min="1" value="3" class="form-control persian-input">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cols" class="form-label">تعداد تقاضاکنندگان (ستون‌ها)</label>
+                            <input type="number" id="cols" min="1" value="3" class="form-control persian-input">
+                        </div>
+                        <div class="col-12 text-center mt-3">
+                            <button onclick="createTable()" class="btn persian-btn">
+                                <i class="fas fa-plus-circle me-2"></i>ایجاد جدول
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="inputTable"></div>
+
+            <div id="calculateSection" class="text-center mb-4" style="display: none;">
+                <button id="calculateBtn" onclick="calculateNWC()" class="btn persian-btn btn-lg">
+                    <i class="fas fa-calculator me-2"></i>محاسبه با روش گوشه شمال غربی
+                </button>
+            </div>
+
+            <div id="transportation-result" style="display: none;">
+                <div class="persian-card">
+                    <div class="card-header persian-card-header">
+                        <i class="fas fa-list-ol me-2"></i>مراحل محاسبه
+                    </div>
+                    <div class="card-body">
+                        <div id="steps"></div>
+                    </div>
+                </div>
+
+                <div class="persian-card">
+                    <div class="card-header persian-card-header">
+                        <i class="fas fa-table me-2"></i>جدول تخصیص نهایی
+                    </div>
+                    <div class="card-body">
+                        <div id="finalTable"></div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-8 mx-auto">
+                        <div class="total-cost-box">
+                            <i class="fas fa-coins me-2"></i>
+                            <span id="totalCostText">هزینه کل حمل و نقل: </span>
+                            <span id="totalCost" class="d-block mt-2 display-4">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- بخش جریان در شبکه -->
+        <div id="networkFlowSection" style="display: none;">
+            <div class="persian-card">
+                <div class="card-header persian-card-header d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-network-wired me-2"></i>تنظیمات مسئله جریان در شبکه</span>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="nf-node-count" class="form-label">تعداد گره‌ها</label>
+                            <input type="number" id="nf-node-count" min="2" max="20" value="5" class="form-control persian-input">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="nf-source-node" class="form-label">گره مبدأ (عرضه)</label>
+                            <select id="nf-source-node" class="form-control persian-input">
+                                <option value="1">گره 1</option>
+                                <option value="2">گره 2</option>
+                                <option value="3">گره 3</option>
+                                <option value="4">گره 4</option>
+                                <option value="5">گره 5</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="nf-source-supply" class="form-label">مقدار عرضه در مبدأ</label>
+                            <input type="number" id="nf-source-supply" min="1" value="20" class="form-control persian-input">
+                        </div>
+                        
+                        <!-- بخش گره‌های عرضه مجازی -->
+                        <div class="col-12" id="dummy-supply-nodes-container">
+                            <!-- گره‌های عرضه مجازی در اینجا نمایش داده می‌شوند -->
+                        </div>
+                        
+                        <div class="col-12">
+                            <label class="form-label">تعریف گره‌های تقاضا:</label>
+                            <div id="nf-demand-nodes" class="mt-3">
+                                <!-- Demand nodes will be dynamically generated here -->
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">تعریف کمان‌ها و پارامترها (i→j, Cij, Uij):</label>
+                            <div id="nf-arcs-container" class="mt-3">
+                                <!-- Arcs inputs will be dynamically generated here -->
+                            </div>
+                        </div>
+                        <div class="col-12 text-center mt-3">
+                            <button id="nf-calculate-btn" class="btn persian-btn">
+                                <i class="fas fa-calculator me-2"></i>محاسبه جریان بهینه
+                            </button>
+                            <button id="nf-dummy-node-btn" class="btn dummy-node-btn ms-3">
+                                <i class="fas fa-plus-circle me-2"></i>ایجاد گره مجازی
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="persian-card">
+                <div class="card-header persian-card-header">
+                    <i class="fas fa-network-wired me-2"></i>نمایش شبکه
+                </div>
+                <div class="card-body">
+                    <div class="network-display">
+                        <div id="network-visual">
+                            <!-- Network visualization will be dynamically generated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="network-flow-result" style="display: none;">
+                <div class="persian-card">
+                    <div class="card-header persian-card-header">
+                        <i class="fas fa-list-ol me-2"></i>نتایج محاسبات جریان در شبکه
+                    </div>
+                    <div class="card-body">
+                        <div class="result-box">
+                            <h4>همه مسیرهای ممکن از مبدأ به مقصد:</h4>
+                            <div id="network-all-paths" class="all-paths-container">
+                                <!-- All possible paths in network flow will be displayed here -->
+                            </div>
+                        </div>
+                        
+                        <div class="result-box mt-4">
+                            <h4>جریان بهینه:</h4>
+                            <div id="optimal-flow">
+                                <!-- Optimal flow will be displayed here -->
+                            </div>
+                        </div>
+                        
+                        <div id="total-flow-cost" class="total-cost-box mt-4">
+                            هزینه کل جریان در اینجا نمایش داده می‌شود
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- بخش نمایش گراف درختی شاخه‌ای -->
+        <div id="graphSection" style="display: none;">
+            <div class="persian-card">
+                <div class="card-header persian-card-header text-center">
+                    <i class="fas fa-sitemap me-2"></i>گراف درختی شاخه‌ای شبکه سیمپلکس
+                </div>
+                <div class="card-body">
+                    <div class="tree-container">
+                        <div class="tree" id="tree-visual">
+                            <!-- Tree visualization will be generated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="tree-controls">
+                        <button id="highlightTreeBtn" class="btn persian-btn">
+                            <i class="fas fa-highlighter me-2"></i>هایلایت مسیرها
+                        </button>
+                        <button id="showPathBtn" class="btn persian-btn">
+                            <i class="fas fa-route me-2"></i>نمایش کوتاهترین مسیر
+                        </button>
+                        <button id="resetTreeBtn" class="btn persian-btn">
+                            <i class="fas fa-redo me-2"></i>بازنشانی نمایش
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle me-2"></i>راهنمای استفاده:</h3>
+            <ol>
+                <li>برای استفاده از برنامه، یکی از چهار گزینه را انتخاب کنید</li>
+                <li><strong>شبکه سیمپلکس</strong>: برای پیدا کردن کوتاهترین مسیر در یک شبکه استفاده می‌شود</li>
+                <li><strong>مسئله حمل و نقل</strong>: برای حل مسئله حمل و نقل با روش گوشه شمال غربی استفاده می‌شود</li>
+                <li><strong>جریان در شبکه</strong>: برای حل مسئله جریان با کمترین هزینه در شبکه استفاده می‌شود</li>
+                <li><strong>گراف درختی شاخه‌ای</strong>: برای نمایش بصری گراف و مسیرهای شبکه سیمپلکس استفاده می‌شود</li>
+                <li>پس از انتخاب برنامه، مقادیر ورودی را تنظیم کرده و روی دکمه محاسبه کلیک کنید</li>
+            </ol>
+        </div>
+        
+        <div class="creator-info">
+            <p class="mb-1">ساخته شده توسط <strong>محمد صالح غلامی</strong></p>
+            <p class="mb-0">درس تحقیق در عملیات - دانشگاه ولی عصر رفسنجان</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // کد شبکه سیمپلکس
+        document.addEventListener('DOMContentLoaded', function() {
+            // بخش شبکه سیمپلکس
+            const nodeCountInput = document.getElementById('node-count');
+            const startNodeSelect = document.getElementById('start-node');
+            const endNodeSelect = document.getElementById('end-node');
+            const edgesContainer = document.getElementById('edges-container');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const allPathsDiv = document.getElementById('all-paths');
+            const shortestPathResult = document.getElementById('shortest-path-result');
+            const graphVisual = document.getElementById('graph-visual');
+            const simplexResult = document.getElementById('simplex-result');
+            
+            // بخش نمایش گراف درختی شاخه‌ای
+            const treeVisual = document.getElementById('tree-visual');
+            const highlightTreeBtn = document.getElementById('highlightTreeBtn');
+            const showPathBtn = document.getElementById('showPathBtn');
+            const resetTreeBtn = document.getElementById('resetTreeBtn');
+            
+            // بخش جریان در شبکه
+            const nfNodeCountInput = document.getElementById('nf-node-count');
+            const nfSourceNodeSelect = document.getElementById('nf-source-node');
+            const nfSourceSupplyInput = document.getElementById('nf-source-supply');
+            const nfDemandNodesContainer = document.getElementById('nf-demand-nodes');
+            const nfArcsContainer = document.getElementById('nf-arcs-container');
+            const nfCalculateBtn = document.getElementById('nf-calculate-btn');
+            const nfDummyNodeBtn = document.getElementById('nf-dummy-node-btn');
+            const networkVisual = document.getElementById('network-visual');
+            const networkFlowResult = document.getElementById('network-flow-result');
+            const networkAllPathsDiv = document.getElementById('network-all-paths');
+            const optimalFlowDiv = document.getElementById('optimal-flow');
+            const totalFlowCostDiv = document.getElementById('total-flow-cost');
+            const dummySupplyNodesContainer = document.getElementById('dummy-supply-nodes-container');
+            
+            let nodeCount = 6;
+            let edges = [];
+            let shortestPath = null;
+            let allPaths = [];
+            
+            // متغیرهای بخش جریان در شبکه
+            let nfNodeCount = 5;
+            let arcs = [];
+            let demandNodes = [];
+            let supplyNodes = [];
+            let dummySupplyNodes = [];
+            
+            // Initialize the applications
+            initializeNodeSelects();
+            generateEdgeInputs();
+            updateGraphVisual();
+            drawTreeVisual();
+            
+            // Initialize the network flow section
+            initializeNFNodeSelects();
+            generateNFDemandNodes();
+            generateNFArcsInputs();
+            updateNetworkVisual();
+            
+            // Event listeners for simplex section
+            nodeCountInput.addEventListener('change', function() {
+                nodeCount = parseInt(this.value);
+                initializeNodeSelects();
+                generateEdgeInputs();
+                updateGraphVisual();
+                drawTreeVisual();
+            });
+            
+            calculateBtn.addEventListener('click', calculateShortestPath);
+            
+            // Event listeners for tree section
+            highlightTreeBtn.addEventListener('click', highlightTreePaths);
+            showPathBtn.addEventListener('click', showShortestPath);
+            resetTreeBtn.addEventListener('click', resetTreeView);
+            
+            // Event listeners for network flow section
+            nfNodeCountInput.addEventListener('change', function() {
+                nfNodeCount = parseInt(this.value);
+                initializeNFNodeSelects();
+                generateNFDemandNodes();
+                generateNFArcsInputs();
+                updateNetworkVisual();
+            });
+            
+            nfCalculateBtn.addEventListener('click', calculateOptimalFlow);
+            nfDummyNodeBtn.addEventListener('click', addNFDummyNode);
+            
+            // Functions for simplex section
+            function initializeNodeSelects() {
+                // Clear existing options
+                startNodeSelect.innerHTML = '';
+                endNodeSelect.innerHTML = '';
+                
+                // Add options based on node count
+                for (let i = 1; i <= nodeCount; i++) {
+                    const option1 = document.createElement('option');
+                    option1.value = i;
+                    option1.textContent = `گره ${i}`;
+                    startNodeSelect.appendChild(option1);
+                    
+                    const option2 = document.createElement('option');
+                    option2.value = i;
+                    option2.textContent = `گره ${i}`;
+                    endNodeSelect.appendChild(option2);
+                }
+                
+                // Set default end node to the last node
+                endNodeSelect.value = nodeCount;
+            }
+            
+            function generateEdgeInputs() {
+                edgesContainer.innerHTML = '';
+                edges = [];
+                
+                // Create a responsive grid for edge inputs
+                const grid = document.createElement('div');
+                grid.className = 'row';
+                
+                // Generate inputs for possible edges
+                for (let i = 1; i <= nodeCount; i++) {
+                    for (let j = 1; j <= nodeCount; j++) {
+                        if (i !== j) {
+                            const col = document.createElement('div');
+                            col.className = 'col-md-6 col-lg-4 mb-3';
+                            
+                            const edgeDiv = document.createElement('div');
+                            edgeDiv.className = 'd-flex align-items-center';
+                            
+                            const checkbox = document.createElement('input');
+                            checkbox.type = 'checkbox';
+                            checkbox.id = `edge-${i}-${j}`;
+                            checkbox.dataset.from = i;
+                            checkbox.dataset.to = j;
+                            checkbox.className = 'form-check-input me-2';
+                            
+                            const label = document.createElement('label');
+                            label.htmlFor = `edge-${i}-${j}`;
+                            label.textContent = ` x${i}${j}: `;
+                            label.className = 'form-check-label me-2';
+                            
+                            const costInput = document.createElement('input');
+                            costInput.type = 'number';
+                            costInput.id = `cost-${i}-${j}`;
+                            costInput.placeholder = 'هزینه (C)';
+                            costInput.className = 'form-control persian-input text-center';
+                            costInput.style.width = '100px';
+                            costInput.disabled = true;
+                            
+                            checkbox.addEventListener('change', function() {
+                                costInput.disabled = !this.checked;
+                                if (!this.checked) {
+                                    costInput.value = '';
+                                }
+                            });
+                            
+                            edgeDiv.appendChild(checkbox);
+                            edgeDiv.appendChild(label);
+                            edgeDiv.appendChild(costInput);
+                            
+                            col.appendChild(edgeDiv);
+                            grid.appendChild(col);
+                        }
+                    }
+                }
+                
+                edgesContainer.appendChild(grid);
+            }
+            
+            function updateGraphVisual() {
+                graphVisual.innerHTML = '';
+                
+                // Create a simple visual representation of nodes
+                for (let i = 1; i <= nodeCount; i++) {
+                    const node = document.createElement('div');
+                    node.className = 'node';
+                    node.textContent = i;
+                    graphVisual.appendChild(node);
+                    
+                    // Add edge representation if not the last node
+                    if (i < nodeCount) {
+                        const edge = document.createElement('div');
+                        edge.className = 'edge';
+                        
+                        const cost = document.createElement('span');
+                        cost.className = 'edge-cost';
+                        cost.textContent = '?';
+                        
+                        edge.appendChild(cost);
+                        graphVisual.appendChild(edge);
+                    }
+                }
+                
+                // Add a message if no edges are defined
+                if (nodeCount > 0) {
+                    const message = document.createElement('p');
+                    message.className = 'text-center mt-3 text-muted';
+                    message.textContent = 'مسیرها و هزینه‌ها را در بخش بالا تعریف کنید';
+                    graphVisual.appendChild(message);
+                }
+            }
+            
+            function calculateShortestPath() {
+                // Collect edges and their costs
+                edges = [];
+                const edgeInputs = document.querySelectorAll('#edges-container .form-check-input:checked');
+                
+                edgeInputs.forEach(checkbox => {
+                    const from = parseInt(checkbox.dataset.from);
+                    const to = parseInt(checkbox.dataset.to);
+                    const costInput = document.getElementById(`cost-${from}-${to}`);
+                    const cost = parseInt(costInput.value);
+                    
+                    if (!isNaN(cost)) {
+                        edges.push({ from, to, cost });
+                    }
+                });
+                
+                // Validate inputs
+                if (edges.length === 0) {
+                    alert('لطفاً حداقل یک مسیر با هزینه معتبر تعریف کنید.');
+                    return;
+                }
+                
+                const startNode = parseInt(startNodeSelect.value);
+                const endNode = parseInt(endNodeSelect.value);
+                
+                if (startNode === endNode) {
+                    alert('گره شروع و پایان نمی‌توانند یکسان باشند.');
+                    return;
+                }
+                
+                // Find all paths and the shortest path
+                allPaths = findAllPaths(startNode, endNode, edges);
+                shortestPath = findShortestPath(allPaths);
+                
+                // Display results
+                displayAllPaths(allPaths);
+                displayShortestPath(shortestPath);
+                updateGraphVisualWithPaths(allPaths, shortestPath);
+                
+                // Update tree visualization with new data
+                drawTreeVisual();
+                
+                // Show result section
+                simplexResult.style.display = 'block';
+                simplexResult.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            function findAllPaths(start, end, edges) {
+                const paths = [];
+                
+                function dfs(current, path, visited, cost) {
+                    if (current === end) {
+                        paths.push({
+                            nodes: [...path],
+                            cost: cost
+                        });
+                        return;
+                    }
+                    
+                    const possibleEdges = edges.filter(edge => edge.from === current && !visited.has(edge.to));
+                    
+                    for (const edge of possibleEdges) {
+                        visited.add(edge.to);
+                        path.push(edge.to);
+                        dfs(edge.to, path, visited, cost + edge.cost);
+                        path.pop();
+                        visited.delete(edge.to);
+                    }
+                }
+                
+                const visited = new Set();
+                visited.add(start);
+                dfs(start, [start], visited, 0);
+                
+                return paths;
+            }
+            
+            function findShortestPath(paths) {
+                if (paths.length === 0) return null;
+                
+                let shortest = paths[0];
+                for (let i = 1; i < paths.length; i++) {
+                    if (paths[i].cost < shortest.cost) {
+                        shortest = paths[i];
+                    }
+                }
+                
+                return shortest;
+            }
+            
+            function displayAllPaths(paths) {
+                allPathsDiv.innerHTML = '';
+                
+                if (paths.length === 0) {
+                    allPathsDiv.innerHTML = '<p class="text-center text-muted">هیچ مسیری بین گره شروع و پایان یافت نشد.</p>';
+                    return;
+                }
+                
+                // Sort paths by cost
+                paths.sort((a, b) => a.cost - b.cost);
+                
+                paths.forEach(path => {
+                    const pathItem = document.createElement('div');
+                    pathItem.className = 'path-row';
+                    
+                    // Highlight the optimal path
+                    if (path === paths[0]) {
+                        pathItem.classList.add('optimal');
+                    }
+                    
+                    const pathText = document.createElement('span');
+                    pathText.className = 'path-nodes';
+                    pathText.textContent = path.nodes.join(' → ');
+                    
+                    const pathCost = document.createElement('span');
+                    pathCost.className = 'path-cost';
+                    if (path === paths[0]) {
+                        pathCost.classList.add('optimal-cost');
+                    }
+                    pathCost.textContent = path.cost.toLocaleString('fa');
+                    
+                    pathItem.appendChild(pathText);
+                    pathItem.appendChild(pathCost);
+                    allPathsDiv.appendChild(pathItem);
+                });
+            }
+            
+            function displayShortestPath(shortestPath) {
+                if (!shortestPath) {
+                    shortestPathResult.textContent = 'هیچ مسیری بین گره شروع و پایان یافت نشد.';
+                    shortestPathResult.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+                    return;
+                }
+                
+                shortestPathResult.innerHTML = `
+                    <i class="fas fa-trophy me-2"></i>کوتاهترین مسیر: ${shortestPath.nodes.join(' → ')} 
+                    <br>
+                    <i class="fas fa-coins me-2"></i>هزینه کل: ${shortestPath.cost.toLocaleString('fa')}
+                `;
+                shortestPathResult.style.background = 'linear-gradient(135deg, #2ecc71, #27ae60)';
+            }
+            
+            function updateGraphVisualWithPaths(allPaths, shortestPath) {
+                // This is a simplified visualization
+                graphVisual.innerHTML = '';
+                
+                // Create nodes
+                for (let i = 1; i <= nodeCount; i++) {
+                    const node = document.createElement('div');
+                    node.className = 'node';
+                    node.textContent = i;
+                    
+                    // Highlight start and end nodes
+                    const startNode = parseInt(startNodeSelect.value);
+                    const endNode = parseInt(endNodeSelect.value);
+                    
+                    if (i === startNode) {
+                        node.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+                    } else if (i === endNode) {
+                        node.style.background = 'linear-gradient(to right, #e74c3c, #c0392b)';
+                    }
+                    
+                    graphVisual.appendChild(node);
+                    
+                    // Add edge representation if not the last node
+                    if (i < nodeCount) {
+                        const edge = document.createElement('div');
+                        edge.className = 'edge';
+                        
+                        // Find if there's an edge between i and i+1
+                        const edgeInfo = edges.find(e => e.from === i && e.to === i+1);
+                        const cost = edgeInfo ? edgeInfo.cost : '?';
+                        
+                        const costElement = document.createElement('span');
+                        costElement.className = 'edge-cost';
+                        costElement.textContent = cost;
+                        
+                        edge.appendChild(costElement);
+                        graphVisual.appendChild(edge);
+                    }
+                }
+                
+                // Display a message about the shortest path
+                if (shortestPath) {
+                    const message = document.createElement('p');
+                    message.className = 'text-center mt-3';
+                    message.innerHTML = `<strong>کوتاهترین مسیر: ${shortestPath.nodes.join(' → ')}</strong>`;
+                    graphVisual.appendChild(message);
+                }
+            }
+            
+            // Functions for tree visualization
+            function drawTreeVisual() {
+                treeVisual.innerHTML = '';
+                
+                // استفاده از داده‌های شبکه سیمپلکس برای رسم درخت
+                const startNode = parseInt(startNodeSelect.value);
+                const endNode = parseInt(endNodeSelect.value);
+                
+                // ایجاد ساختار درختی بر اساس گراف
+                const treeNodes = [];
+                const treeEdges = [];
+                
+                // اضافه کردن گره‌ها
+                for (let i = 1; i <= nodeCount; i++) {
+                    treeNodes.push({
+                        id: i,
+                        x: 0, // موقعیت‌ها بعداً محاسبه می‌شوند
+                        y: 0,
+                        label: `گره ${i}`,
+                        type: i === startNode ? 'start' : (i === endNode ? 'end' : 'normal')
+                    });
+                }
+                
+                // اضافه کردن یال‌ها
+                edges.forEach(edge => {
+                    treeEdges.push({
+                        from: edge.from,
+                        to: edge.to,
+                        label: edge.cost.toString()
+                    });
+                });
+                
+                // محاسبه موقعیت‌ها برای نمایش درختی شاخه‌ای
+                calculateTreePositions(treeNodes, treeEdges, startNode);
+                
+                // رسم اتصالات
+                treeEdges.forEach(edge => {
+                    const fromNode = treeNodes.find(n => n.id === edge.from);
+                    const toNode = treeNodes.find(n => n.id === edge.to);
+                    
+                    if (fromNode && toNode) {
+                        const length = Math.sqrt(Math.pow(toNode.x - fromNode.x, 2) + Math.pow(toNode.y - fromNode.y, 2));
+                        const angle = Math.atan2(toNode.y - fromNode.y, toNode.x - fromNode.x) * 180 / Math.PI;
+                        
+                        const connection = document.createElement('div');
+                        connection.className = 'tree-connection';
+                        connection.style.width = `${length}px`;
+                        connection.style.left = `${fromNode.x}px`;
+                        connection.style.top = `${fromNode.y}px`;
+                        connection.style.transform = `rotate(${angle}deg)`;
+                        
+                        treeVisual.appendChild(connection);
+                        
+                        // اضافه کردن برچسب وزن یال
+                        const label = document.createElement('div');
+                        label.className = 'tree-label';
+                        label.textContent = edge.label;
+                        label.style.left = `${(fromNode.x + toNode.x) / 2}px`;
+                        label.style.top = `${(fromNode.y + toNode.y) / 2 - 15}px`;
+                        
+                        treeVisual.appendChild(label);
+                    }
+                });
+                
+                // رسم گره‌ها
+                treeNodes.forEach(node => {
+                    const nodeElement = document.createElement('div');
+                    nodeElement.className = `tree-node ${node.type}`;
+                    nodeElement.innerHTML = `
+                        <div>${node.label}</div>
+                        <div class="node-info">ID: ${node.id}</div>
+                    `;
+                    nodeElement.style.left = `${node.x - 35}px`;
+                    nodeElement.style.top = `${node.y - 35}px`;
+                    nodeElement.dataset.id = node.id;
+                    
+                    // اضافه کردن انیمیشن با تأخیر برای ایجاد اثر آبشاری
+                    const delay = node.id * 100;
+                    nodeElement.style.animation = `fadeIn 0.5s ease ${delay}ms both`;
+                    
+                    nodeElement.addEventListener('click', function() {
+                        highlightTreeNode(this.dataset.id);
+                    });
+                    
+                    treeVisual.appendChild(nodeElement);
+                });
+            }
+            
+            function calculateTreePositions(nodes, edges, startNodeId) {
+                // الگوریتم ساده برای محاسبه موقعیت‌های درختی
+                const levelHeight = 120;
+                const nodeWidth = 100;
+                const startX = 350;
+                const startY = 80;
+                
+                // پیدا کردن گره شروع
+                const startNode = nodes.find(n => n.id === startNodeId);
+                if (startNode) {
+                    startNode.x = startX;
+                    startNode.y = startY;
+                }
+                
+                // پیدا کردن گره‌های همسایه
+                const visited = new Set([startNodeId]);
+                const queue = [{nodeId: startNodeId, level: 0, index: 0}];
+                
+                while (queue.length > 0) {
+                    const current = queue.shift();
+                    const currentNode = nodes.find(n => n.id === current.nodeId);
+                    
+                    // پیدا کردن یال‌های خروجی از گره فعلی
+                    const outgoingEdges = edges.filter(e => e.from === current.nodeId && !visited.has(e.to));
+                    
+                    // محاسبه موقعیت برای گره‌های فرزند
+                    outgoingEdges.forEach((edge, index) => {
+                        const childNode = nodes.find(n => n.id === edge.to);
+                        if (childNode) {
+                            const childLevel = current.level + 1;
+                            const childIndex = index - Math.floor(outgoingEdges.length / 2);
+                            
+                            childNode.x = currentNode.x + childIndex * nodeWidth;
+                            childNode.y = currentNode.y + levelHeight;
+                            
+                            visited.add(edge.to);
+                            queue.push({nodeId: edge.to, level: childLevel, index: childIndex});
+                        }
+                    });
+                }
+                
+                // تنظیم موقعیت گره‌های بدون والد (در صورت وجود)
+                nodes.forEach(node => {
+                    if (!node.x && !node.y) {
+                        node.x = Math.random() * 500 + 100;
+                        node.y = Math.random() * 300 + 100;
+                    }
+                });
+            }
+            
+            function highlightTreePaths() {
+                // هایلایت مسیرها در گراف درختی
+                document.querySelectorAll('.tree-connection').forEach(edge => {
+                    edge.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+                    edge.style.height = '4px';
+                });
+                
+                document.querySelectorAll('.tree-label').forEach(label => {
+                    label.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+                    label.style.color = 'white';
+                });
+            }
+            
+            function showShortestPath() {
+                if (!shortestPath) {
+                    alert('لطفاً ابتدا کوتاهترین مسیر را در بخش شبکه سیمپلکس محاسبه کنید.');
+                    return;
+                }
+                
+                // بازنشانی نمایش
+                resetTreeView();
+                
+                // هایلایت مسیر کوتاهترین
+                const pathNodes = shortestPath.nodes;
+                
+                for (let i = 0; i < pathNodes.length - 1; i++) {
+                    const fromNode = pathNodes[i];
+                    const toNode = pathNodes[i + 1];
+                    
+                    // پیدا کردن اتصال مربوطه
+                    const connection = Array.from(document.querySelectorAll('.tree-connection')).find(conn => {
+                        // این منطق ساده است و در برنامه واقعی نیاز به منطق پیچیده‌تری دارد
+                        return true;
+                    });
+                    
+                    if (connection) {
+                        connection.style.background = 'linear-gradient(to right, #e74c3c, #c0392b)';
+                        connection.style.height = '5px';
+                    }
+                    
+                    // هایلایت گره‌های مسیر
+                    const fromNodeElement = document.querySelector(`.tree-node[data-id="${fromNode}"]`);
+                    const toNodeElement = document.querySelector(`.tree-node[data-id="${toNode}"]`);
+                    
+                    if (fromNodeElement) fromNodeElement.classList.add('current');
+                    if (toNodeElement) toNodeElement.classList.add('current');
+                }
+                
+                // هایلایت برچسب‌های مربوطه
+                document.querySelectorAll('.tree-label').forEach(label => {
+                    label.style.background = 'linear-gradient(to right, #e74c3c, #c0392b)';
+                    label.style.color = 'white';
+                });
+            }
+            
+            function resetTreeView() {
+                // بازنشانی نمایش گراف درختی
+                drawTreeVisual();
+            }
+            
+            function highlightTreeNode(nodeId) {
+                // هایلایت گره انتخاب شده
+                document.querySelectorAll('.tree-node').forEach(node => {
+                    node.style.background = 'linear-gradient(to right, var(--primary-color), var(--secondary-color))';
+                    node.classList.remove('current');
+                });
+                
+                const selectedNode = document.querySelector(`.tree-node[data-id="${nodeId}"]`);
+                if (selectedNode) {
+                    selectedNode.style.background = 'linear-gradient(to right, #f39c12, #e67e22)';
+                    
+                    // هایلایت اتصالات مرتبط
+                    document.querySelectorAll('.tree-connection').forEach(conn => {
+                        conn.style.background = 'var(--dark-text)';
+                        conn.style.height = '2px';
+                    });
+                }
+            }
+            
+            // Functions for network flow section
+            function initializeNFNodeSelects() {
+                // Clear existing options
+                nfSourceNodeSelect.innerHTML = '';
+                
+                // Add options based on node count
+                for (let i = 1; i <= nfNodeCount; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = `گره ${i}`;
+                    nfSourceNodeSelect.appendChild(option);
+                }
+            }
+            
+            function generateNFDemandNodes() {
+                nfDemandNodesContainer.innerHTML = '';
+                demandNodes = [];
+                
+                // Create a responsive grid for demand nodes
+                const grid = document.createElement('div');
+                grid.className = 'row';
+                
+                // Generate inputs for demand nodes (all nodes except source)
+                const sourceNode = parseInt(nfSourceNodeSelect.value);
+                
+                for (let i = 1; i <= nfNodeCount; i++) {
+                    if (i !== sourceNode) {
+                        const col = document.createElement('div');
+                        col.className = 'col-md-6 col-lg-4 mb-3';
+                        
+                        const demandDiv = document.createElement('div');
+                        demandDiv.className = 'd-flex align-items-center';
+                        
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = `demand-${i}`;
+                        checkbox.dataset.node = i;
+                        checkbox.className = 'form-check-input me-2';
+                        
+                        const label = document.createElement('label');
+                        label.htmlFor = `demand-${i}`;
+                        label.textContent = ` گره ${i} (تقاضا): `;
+                        label.className = 'form-check-label me-2';
+                        
+                        const demandInput = document.createElement('input');
+                        demandInput.type = 'number';
+                        demandInput.id = `demand-value-${i}`;
+                        demandInput.placeholder = 'مقدار تقاضا';
+                        demandInput.className = 'form-control persian-input text-center';
+                        demandInput.style.width = '120px';
+                        demandInput.disabled = true;
+                        
+                        checkbox.addEventListener('change', function() {
+                            demandInput.disabled = !this.checked;
+                            if (!this.checked) {
+                                demandInput.value = '';
+                            }
+                        });
+                        
+                        demandDiv.appendChild(checkbox);
+                        demandDiv.appendChild(label);
+                        demandDiv.appendChild(demandInput);
+                        
+                        col.appendChild(demandDiv);
+                        grid.appendChild(col);
+                    }
+                }
+                
+                nfDemandNodesContainer.appendChild(grid);
+            }
+            
+            function generateNFArcsInputs() {
+                nfArcsContainer.innerHTML = '';
+                arcs = [];
+                
+                // Create a responsive grid for arc inputs
+                const grid = document.createElement('div');
+                grid.className = 'row';
+                
+                // Generate inputs for possible arcs
+                for (let i = 1; i <= nfNodeCount; i++) {
+                    for (let j = 1; j <= nfNodeCount; j++) {
+                        if (i !== j) {
+                            const col = document.createElement('div');
+                            col.className = 'col-md-6 col-lg-4 mb-3';
+                            
+                            const arcDiv = document.createElement('div');
+                            arcDiv.className = 'd-flex align-items-center';
+                            
+                            const checkbox = document.createElement('input');
+                            checkbox.type = 'checkbox';
+                            checkbox.id = `arc-${i}-${j}`;
+                            checkbox.dataset.from = i;
+                            checkbox.dataset.to = j;
+                            checkbox.className = 'form-check-input me-2';
+                            
+                            const label = document.createElement('label');
+                            label.htmlFor = `arc-${i}-${j}`;
+                            label.textContent = ` ${i}→${j}: `;
+                            label.className = 'form-check-label me-2';
+                            
+                            const costInput = document.createElement('input');
+                            costInput.type = 'number';
+                            costInput.id = `arc-cost-${i}-${j}`;
+                            costInput.placeholder = 'هزینه (C)';
+                            costInput.className = 'form-control persian-input text-center me-2';
+                            costInput.style.width = '80px';
+                            costInput.disabled = true;
+                            
+                            const capacityInput = document.createElement('input');
+                            capacityInput.type = 'number';
+                            capacityInput.id = `arc-capacity-${i}-${j}`;
+                            capacityInput.placeholder = 'ظرفیت (U)';
+                            capacityInput.className = 'form-control persian-input text-center';
+                            capacityInput.style.width = '80px';
+                            capacityInput.disabled = true;
+                            
+                            checkbox.addEventListener('change', function() {
+                                costInput.disabled = !this.checked;
+                                capacityInput.disabled = !this.checked;
+                                if (!this.checked) {
+                                    costInput.value = '';
+                                    capacityInput.value = '';
+                                }
+                            });
+                            
+                            arcDiv.appendChild(checkbox);
+                            arcDiv.appendChild(label);
+                            arcDiv.appendChild(costInput);
+                            arcDiv.appendChild(capacityInput);
+                            
+                            col.appendChild(arcDiv);
+                            grid.appendChild(col);
+                        }
+                    }
+                }
+                
+                nfArcsContainer.appendChild(grid);
+            }
+            
+            function updateNetworkVisual() {
+                networkVisual.innerHTML = '';
+                
+                // Create a simple visual representation of nodes
+                for (let i = 1; i <= nfNodeCount; i++) {
+                    const node = document.createElement('div');
+                    node.className = 'node';
+                    
+                    // Check if node is source
+                    if (i === parseInt(nfSourceNodeSelect.value)) {
+                        node.classList.add('supply');
+                    }
+                    
+                    // Check if node is dummy supply
+                    if (dummySupplyNodes.includes(i)) {
+                        node.classList.add('supply');
+                    }
+                    
+                    // Check if node is demand
+                    const demandCheckbox = document.getElementById(`demand-${i}`);
+                    if (demandCheckbox && demandCheckbox.checked) {
+                        node.classList.add('demand');
+                    }
+                    
+                    node.textContent = i;
+                    networkVisual.appendChild(node);
+                    
+                    // Add edge representation if not the last node
+                    if (i < nfNodeCount) {
+                        const edge = document.createElement('div');
+                        edge.className = 'edge';
+                        
+                        const cost = document.createElement('span');
+                        cost.className = 'edge-cost';
+                        cost.textContent = '?';
+                        
+                        const capacity = document.createElement('span');
+                        capacity.className = 'capacity';
+                        capacity.textContent = '∞';
+                        
+                        edge.appendChild(cost);
+                        edge.appendChild(capacity);
+                        networkVisual.appendChild(edge);
+                    }
+                }
+                
+                // Add a message if no arcs are defined
+                if (nfNodeCount > 0) {
+                    const message = document.createElement('p');
+                    message.className = 'text-center mt-3 text-muted';
+                    message.textContent = 'کمان‌ها و پارامترها را در بخش بالا تعریف کنید';
+                    networkVisual.appendChild(message);
+                }
+            }
+            
+            function calculateOptimalFlow() {
+                // Collect arcs and their parameters
+                arcs = [];
+                const arcInputs = document.querySelectorAll('#nf-arcs-container .form-check-input:checked');
+                
+                arcInputs.forEach(checkbox => {
+                    const from = parseInt(checkbox.dataset.from);
+                    const to = parseInt(checkbox.dataset.to);
+                    const costInput = document.getElementById(`arc-cost-${from}-${to}`);
+                    const capacityInput = document.getElementById(`arc-capacity-${from}-${to}`);
+                    
+                    const cost = costInput.value ? parseInt(costInput.value) : 0;
+                    const capacity = capacityInput.value ? parseInt(capacityInput.value) : Infinity;
+                    
+                    arcs.push({ from, to, cost, capacity });
+                });
+                
+                // Collect demand nodes
+                demandNodes = [];
+                const demandInputs = document.querySelectorAll('#nf-demand-nodes .form-check-input:checked');
+                
+                demandInputs.forEach(checkbox => {
+                    const node = parseInt(checkbox.dataset.node);
+                    const demandValueInput = document.getElementById(`demand-value-${node}`);
+                    const demand = demandValueInput.value ? parseInt(demandValueInput.value) : 0;
+                    
+                    demandNodes.push({ node, demand });
+                });
+                
+                // Collect supply nodes (main source + dummy supplies)
+                supplyNodes = [];
+                
+                // Main source
+                const sourceNode = parseInt(nfSourceNodeSelect.value);
+                const sourceSupply = parseInt(nfSourceSupplyInput.value);
+                supplyNodes.push({ node: sourceNode, supply: sourceSupply });
+                
+                // Dummy supplies
+                const dummySupplyInputs = document.querySelectorAll('.dummy-supply-input');
+                dummySupplyInputs.forEach(input => {
+                    const node = parseInt(input.dataset.node);
+                    const supply = parseInt(input.value) || 0;
+                    if (supply > 0) {
+                        supplyNodes.push({ node, supply });
+                    }
+                });
+                
+                // Validate inputs
+                if (arcs.length === 0) {
+                    alert('لطفاً حداقل یک کمان با پارامترهای معتبر تعریف کنید.');
+                    return;
+                }
+                
+                if (demandNodes.length === 0) {
+                    alert('لطفاً حداقل یک گره تقاضا تعریف کنید.');
+                    return;
+                }
+                
+                // Check supply-demand balance
+                const totalSupply = supplyNodes.reduce((sum, node) => sum + node.supply, 0);
+                const totalDemand = demandNodes.reduce((sum, node) => sum + node.demand, 0);
+                
+                if (totalSupply !== totalDemand) {
+                    alert(`عرضه کل (${totalSupply}) با تقاضای کل (${totalDemand}) برابر نیست. لطفاً از دکمه "ایجاد گره مجازی" استفاده کنید.`);
+                    return;
+                }
+                
+                // Find all paths from each supply to each demand and calculate costs
+                const allPaths = [];
+                
+                supplyNodes.forEach(supply => {
+                    demandNodes.forEach(demand => {
+                        const paths = findPaths(supply.node, demand.node, arcs);
+                        paths.forEach(path => {
+                            allPaths.push({
+                                supplyNode: supply.node,
+                                demandNode: demand.node,
+                                path: path.nodes,
+                                cost: path.cost,
+                                capacity: getPathCapacity(path, arcs)
+                            });
+                        });
+                    });
+                });
+                
+                // Display all possible paths
+                displayNetworkAllPaths(allPaths);
+                
+                // Solve the network flow problem (simplified simulation)
+                const solution = solveNetworkFlow(supplyNodes, demandNodes, arcs);
+                
+                // Display results
+                displayOptimalFlow(solution.flow);
+                displayTotalFlowCost(solution.totalCost);
+                
+                // Show result section
+                networkFlowResult.style.display = 'block';
+                networkFlowResult.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            function findPaths(start, end, arcs) {
+                const paths = [];
+                
+                function dfs(current, path, visited, cost) {
+                    if (current === end) {
+                        paths.push({
+                            nodes: [...path],
+                            cost: cost
+                        });
+                        return;
+                    }
+                    
+                    const possibleArcs = arcs.filter(arc => arc.from === current && !visited.has(arc.to));
+                    
+                    for (const arc of possibleArcs) {
+                        visited.add(arc.to);
+                        path.push(arc.to);
+                        dfs(arc.to, path, visited, cost + arc.cost);
+                        path.pop();
+                        visited.delete(arc.to);
+                    }
+                }
+                
+                const visited = new Set();
+                visited.add(start);
+                dfs(start, [start], visited, 0);
+                
+                return paths;
+            }
+            
+            function getPathCapacity(path, arcs) {
+                let capacity = Infinity;
+                
+                for (let i = 0; i < path.nodes.length - 1; i++) {
+                    const from = path.nodes[i];
+                    const to = path.nodes[i+1];
+                    const arc = arcs.find(a => a.from === from && a.to === to);
+                    
+                    if (arc && arc.capacity < capacity) {
+                        capacity = arc.capacity;
+                    }
+                }
+                
+                return capacity;
+            }
+            
+            function displayNetworkAllPaths(allPaths) {
+                networkAllPathsDiv.innerHTML = '';
+                
+                if (allPaths.length === 0) {
+                    networkAllPathsDiv.innerHTML = '<p class="text-center text-muted">هیچ مسیری بین گره‌های عرضه و تقاضا یافت نشد.</p>';
+                    return;
+                }
+                
+                // Sort paths by cost
+                allPaths.sort((a, b) => a.cost - b.cost);
+                
+                allPaths.forEach((path, index) => {
+                    const pathItem = document.createElement('div');
+                    pathItem.className = 'path-row';
+                    
+                    // Highlight the optimal path
+                    if (index === 0) {
+                        pathItem.classList.add('optimal');
+                    }
+                    
+                    const pathText = document.createElement('span');
+                    pathText.className = 'path-nodes';
+                    pathText.textContent = `S${path.supplyNode} → ${path.path.join(' → ')} (D${path.demandNode})`;
+                    
+                    const pathCost = document.createElement('span');
+                    pathCost.className = 'path-cost';
+                    if (index === 0) {
+                        pathCost.classList.add('optimal-cost');
+                    }
+                    pathCost.textContent = path.cost.toLocaleString('fa');
+                    
+                    pathItem.appendChild(pathText);
+                    pathItem.appendChild(pathCost);
+                    networkAllPathsDiv.appendChild(pathItem);
+                });
+            }
+            
+            function solveNetworkFlow(supplyNodes, demandNodes, arcs) {
+                // This is a simplified simulation of network flow solution
+                // In a real application, you would use a proper algorithm like Min Cost Flow
+                
+                // Create a simple flow distribution (this is not an optimal solution)
+                const flow = {};
+                let totalCost = 0;
+                
+                // Initialize flow for all arcs to 0
+                arcs.forEach(arc => {
+                    flow[`${arc.from}-${arc.to}`] = 0;
+                });
+                
+                // Simple heuristic: try to satisfy demands from sources through shortest paths
+                demandNodes.forEach(demandNode => {
+                    let remainingDemand = demandNode.demand;
+                    
+                    // For each supply node, try to send flow to this demand
+                    for (const supplyNode of supplyNodes) {
+                        if (remainingDemand <= 0) break;
+                        
+                        // Find paths from this supply to demand node
+                        const paths = findPaths(supplyNode.node, demandNode.node, arcs);
+                        
+                        // Sort paths by cost
+                        paths.sort((a, b) => a.cost - b.cost);
+                        
+                        // Distribute flow along the cheapest path
+                        for (const path of paths) {
+                            if (remainingDemand <= 0 || supplyNode.supply <= 0) break;
+                            
+                            const pathFlow = Math.min(
+                                remainingDemand, 
+                                supplyNode.supply,
+                                getPathCapacity(path, arcs)
+                            );
+                            
+                            if (pathFlow > 0) {
+                                // Assign flow to this path
+                                for (let i = 0; i < path.nodes.length - 1; i++) {
+                                    const from = path.nodes[i];
+                                    const to = path.nodes[i+1];
+                                    const arcKey = `${from}-${to}`;
+                                    flow[arcKey] += pathFlow;
+                                    
+                                    // Find the arc to get its cost
+                                    const arc = arcs.find(a => a.from === from && a.to === to);
+                                    totalCost += pathFlow * arc.cost;
+                                }
+                                
+                                remainingDemand -= pathFlow;
+                                supplyNode.supply -= pathFlow;
+                            }
+                        }
+                    }
+                });
+                
+                return { flow, totalCost };
+            }
+            
+            function displayOptimalFlow(flow) {
+                let flowHTML = '<div class="table-responsive"><table class="table table-bordered"><thead><tr><th>کمان</th><th>جریان بهینه</th></tr></thead><tbody>';
+                
+                for (const arcKey in flow) {
+                    if (flow[arcKey] > 0) {
+                        flowHTML += `<tr><td>x<sub>${arcKey}</sub></td><td>${flow[arcKey]}</td></tr>`;
+                    }
+                }
+                
+                flowHTML += '</tbody></table></div>';
+                optimalFlowDiv.innerHTML = flowHTML;
+            }
+            
+            function displayTotalFlowCost(totalCost) {
+                totalFlowCostDiv.innerHTML = `
+                    <i class="fas fa-coins me-2"></i>
+                    هزینه کل جریان: ${totalCost.toLocaleString('fa')}
+                `;
+            }
+            
+            function addNFDummyNode() {
+                const sourceNode = parseInt(nfSourceNodeSelect.value);
+                const sourceSupply = parseInt(nfSourceSupplyInput.value);
+                
+                // Calculate total demand
+                let totalDemand = 0;
+                const demandInputs = document.querySelectorAll('#nf-demand-nodes .form-check-input:checked');
+                
+                demandInputs.forEach(checkbox => {
+                    const node = parseInt(checkbox.dataset.node);
+                    const demandValueInput = document.getElementById(`demand-value-${node}`);
+                    const demand = demandValueInput.value ? parseInt(demandValueInput.value) : 0;
+                    totalDemand += demand;
+                });
+                
+                // Calculate total supply (main source + dummy supplies)
+                let totalSupply = sourceSupply;
+                const dummySupplyInputs = document.querySelectorAll('.dummy-supply-input');
+                dummySupplyInputs.forEach(input => {
+                    totalSupply += parseInt(input.value) || 0;
+                });
+                
+                // Check if balance is needed
+                if (totalSupply === totalDemand) {
+                    alert('عرضه و تقاضا در حال حاضر برابر است. نیازی به گره مجازی نیست.');
+                    return;
+                }
+                
+                // Calculate difference
+                const difference = Math.abs(totalSupply - totalDemand);
+                
+                if (totalSupply > totalDemand) {
+                    // Add demand dummy node
+                    alert(`عرضه کل (${totalSupply}) بیشتر از تقاضا (${totalDemand}) است. یک گره تقاضای مجازی با مقدار ${difference} اضافه خواهد شد.`);
+                    
+                    // Increase node count
+                    nfNodeCount++;
+                    nfNodeCountInput.value = nfNodeCount;
+                    
+                    // Regenerate inputs
+                    initializeNFNodeSelects();
+                    generateNFDemandNodes();
+                    generateNFArcsInputs();
+                    updateNetworkVisual();
+                    
+                    // Set the new node as demand
+                    const newDemandCheckbox = document.getElementById(`demand-${nfNodeCount}`);
+                    const newDemandInput = document.getElementById(`demand-value-${nfNodeCount}`);
+                    
+                    if (newDemandCheckbox && newDemandInput) {
+                        newDemandCheckbox.checked = true;
+                        newDemandInput.disabled = false;
+                        newDemandInput.value = difference;
+                    }
+                    
+                    // Add arcs from all nodes to the dummy node with zero cost and infinite capacity
+                    for (let i = 1; i < nfNodeCount; i++) {
+                        const arcCheckbox = document.getElementById(`arc-${i}-${nfNodeCount}`);
+                        const arcCostInput = document.getElementById(`arc-cost-${i}-${nfNodeCount}`);
+                        const arcCapacityInput = document.getElementById(`arc-capacity-${i}-${nfNodeCount}`);
+                        
+                        if (arcCheckbox && arcCostInput && arcCapacityInput) {
+                            arcCheckbox.checked = true;
+                            arcCostInput.disabled = false;
+                            arcCapacityInput.disabled = false;
+                            arcCostInput.value = 0;
+                            arcCapacityInput.value = '';
+                        }
+                    }
+                    
+                } else {
+                    // Add supply dummy node
+                    alert(`تقاضا (${totalDemand}) بیشتر از عرضه (${totalSupply}) است. یک گره عرضه مجازی با مقدار ${difference} اضافه خواهد شد.`);
+                    
+                    // Increase node count
+                    nfNodeCount++;
+                    nfNodeCountInput.value = nfNodeCount;
+                    
+                    // Regenerate inputs
+                    initializeNFNodeSelects();
+                    generateNFDemandNodes();
+                    generateNFArcsInputs();
+                    
+                    // Add the new node to dummy supply nodes
+                    dummySupplyNodes.push(nfNodeCount);
+                    
+                    // Create input for dummy supply
+                    const dummySupplyDiv = document.createElement('div');
+                    dummySupplyDiv.className = 'col-md-4 mb-3';
+                    dummySupplyDiv.innerHTML = `
+                        <label for="dummy-supply-${nfNodeCount}" class="form-label">مقدار عرضه گره مجازی ${nfNodeCount}</label>
+                        <input type="number" id="dummy-supply-${nfNodeCount}" data-node="${nfNodeCount}" 
+                               value="${difference}" class="form-control persian-input dummy-supply-input">
+                    `;
+                    
+                    dummySupplyNodesContainer.appendChild(dummySupplyDiv);
+                    
+                    // Add arcs from dummy node to all demand nodes with zero cost and infinite capacity
+                    for (let i = 1; i < nfNodeCount; i++) {
+                        // Check if this is a demand node
+                        const demandCheckbox = document.getElementById(`demand-${i}`);
+                        if (demandCheckbox && demandCheckbox.checked) {
+                            const arcCheckbox = document.getElementById(`arc-${nfNodeCount}-${i}`);
+                            const arcCostInput = document.getElementById(`arc-cost-${nfNodeCount}-${i}`);
+                            const arcCapacityInput = document.getElementById(`arc-capacity-${nfNodeCount}-${i}`);
+                            
+                            if (arcCheckbox && arcCostInput && arcCapacityInput) {
+                                arcCheckbox.checked = true;
+                                arcCostInput.disabled = false;
+                                arcCapacityInput.disabled = false;
+                                arcCostInput.value = 0;
+                                arcCapacityInput.value = '';
+                            }
+                        }
+                    }
+                    
+                    updateNetworkVisual();
+                }
+                
+                alert('گره مجازی با موفقیت اضافه شد. اکنون می‌توانید مسئله را حل کنید.');
+            }
+        });
+
+        // کد مسئله حمل و نقل
+        function createTable() {
+            const rows = parseInt(document.getElementById('rows').value);
+            const cols = parseInt(document.getElementById('cols').value);
+            
+            let tableHTML = `
+                <div class="persian-card">
+                    <div class="card-header persian-card-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-edit me-2"></i>مقادیر جدول حمل و نقل</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-4">لطفاً مقادیر هزینه‌ها، عرضه و تقاضا را وارد کنید:</p>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 150px;"></th>
+                            `;
+            
+            // ایجاد سرستون‌ها
+            for (let j = 0; j < cols; j++) {
+                tableHTML += `<th>تقاضا D${j+1}</th>`;
+            }
+            tableHTML += `<th>عرضه</th></tr></thead><tbody>`;
+            
+            // ایجاد سطرها
+            for (let i = 0; i < rows; i++) {
+                tableHTML += `
+                    <tr>
+                        <th class="align-middle">عرضه S${i+1}</th>
+                `;
+                for (let j = 0; j < cols; j++) {
+                    tableHTML += `
+                        <td>
+                            <input type="number" min="0" id="cell_${i}_${j}" 
+                                   placeholder="هزینه" class="form-control persian-input text-center">
+                        </td>
+                    `;
+                }
+                tableHTML += `
+                        <td>
+                            <input type="number" min="0" id="supply_${i}" 
+                                   placeholder="عرضه" class="form-control persian-input text-center">
+                        </td>
+                    </tr>
+                `;
+            }
+            
+            // ردیف تقاضا
+            tableHTML += `
+                    <tr>
+                        <th class="align-middle">تقاضا</th>
+            `;
+            for (let j = 0; j < cols; j++) {
+                tableHTML += `
+                    <td>
+                        <input type="number" min="0" id="demand_${j}" 
+                               placeholder="تقاضا" class="form-control persian-input text-center">
+                    </td>
+                `;
+            }
+            tableHTML += `
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+            `;
+            
+            document.getElementById('inputTable').innerHTML = tableHTML;
+            document.getElementById('calculateSection').style.display = 'block';
+            document.getElementById('transportation-result').style.display = 'none';
+            
+            // اسکرول به بخش جدول
+            document.getElementById('inputTable').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function calculateNWC() {
+            const rows = parseInt(document.getElementById('rows').value);
+            const cols = parseInt(document.getElementById('cols').value);
+            
+            // خواندن داده‌ها
+            const costs = [];
+            const supply = [];
+            const demand = [];
+            
+            // اعتبارسنجی ورودی‌ها
+            let isValid = true;
+            
+            for (let i = 0; i < rows; i++) {
+                costs[i] = [];
+                for (let j = 0; j < cols; j++) {
+                    const value = document.getElementById(`cell_${i}_${j}`).value;
+                    if (value === '') {
+                        alert(`لطفاً مقدار هزینه برای سطر ${i+1} و ستون ${j+1} را وارد کنید.`);
+                        isValid = false;
+                        document.getElementById(`cell_${i}_${j}`).focus();
+                        return;
+                    }
+                    costs[i][j] = parseInt(value);
+                }
+                
+                const supplyValue = document.getElementById(`supply_${i}`).value;
+                if (supplyValue === '') {
+                    alert(`لطفاً مقدار عرضه برای سطر ${i+1} را وارد کنید.`);
+                    isValid = false;
+                    document.getElementById(`supply_${i}`).focus();
+                    return;
+                }
+                supply[i] = parseInt(supplyValue);
+            }
+            
+            for (let j = 0; j < cols; j++) {
+                const demandValue = document.getElementById(`demand_${j}`).value;
+                if (demandValue === '') {
+                    alert(`لطفاً مقدار تقاضا برای ستون ${j+1} را وارد کنید.`);
+                    isValid = false;
+                    document.getElementById(`demand_${j}`).focus();
+                    return;
+                }
+                demand[j] = parseInt(demandValue);
+            }
+            
+            // بررسی توازن عرضه و تقاضا
+            const totalSupply = supply.reduce((a, b) => a + b, 0);
+            const totalDemand = demand.reduce((a, b) => a + b, 0);
+            
+            if (totalSupply !== totalDemand) {
+                alert(`عرضه کل (${totalSupply}) با تقاضای کل (${totalDemand}) برابر نیست. مسئله باید متوازن باشد.`);
+                return;
+            }
+            
+            // کپی از عرضه و تقاضا برای محاسبات
+            const tempSupply = [...supply];
+            const tempDemand = [...demand];
+            
+            // ماتریس تخصیص
+            const allocation = Array(rows).fill().map(() => Array(cols).fill(0));
+            
+            let stepsHTML = '<div class="steps-container">';
+            let i = 0, j = 0;
+            let step = 1;
+            
+            // اجرای الگوریتم گوشه شمال غربی
+            while (i < rows && j < cols) {
+                const amount = Math.min(tempSupply[i], tempDemand[j]);
+                
+                if (amount > 0) {
+                    allocation[i][j] = amount;
+                    tempSupply[i] -= amount;
+                    tempDemand[j] -= amount;
+                    
+                    stepsHTML += `
+                        <div class="step-box">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="step-number">${step}</span>
+                                <h5 class="mb-0">تخصیص مقدار ${amount} از S${i+1} به D${j+1}</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-1"><i class="fas fa-box-open me-2"></i>عرضه باقیمانده S${i+1}: ${tempSupply[i].toLocaleString('fa')}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-1"><i class="fas fa-shopping-cart me-2"></i>تقاضای باقیمانده D${j+1}: ${tempDemand[j].toLocaleString('fa')}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    step++;
+                }
+                
+                if (tempSupply[i] === 0) {
+                    i++;
+                } else {
+                    j++;
+                }
+            }
+            
+            stepsHTML += '</div>';
+            document.getElementById('steps').innerHTML = stepsHTML;
+            
+            // نمایش جدول نهایی
+            let finalHTML = `
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width: 150px;"></th>
+            `;
+            
+            for (let j = 0; j < cols; j++) {
+                finalHTML += `<th>D${j+1}</th>`;
+            }
+            finalHTML += `
+                            <th>عرضه</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            let totalCost = 0;
+            
+            for (let i = 0; i < rows; i++) {
+                finalHTML += `
+                    <tr>
+                        <th class="align-middle">S${i+1}</th>
+                `;
+                for (let j = 0; j < cols; j++) {
+                    if (allocation[i][j] > 0) {
+                        finalHTML += `
+                            <td class="highlight-cell">
+                                ${allocation[i][j].toLocaleString('fa')}
+                                <small class="d-block text-muted">(${costs[i][j].toLocaleString('fa')} × ${allocation[i][j].toLocaleString('fa')})</small>
+                            </td>
+                        `;
+                        totalCost += allocation[i][j] * costs[i][j];
+                    } else {
+                        finalHTML += `<td>${allocation[i][j].toLocaleString('fa')}</td>`;
+                    }
+                }
+                finalHTML += `
+                        <td>${supply[i].toLocaleString('fa')}</td>
+                    </tr>
+                `;
+            }
+            
+            finalHTML += `
+                        <tr>
+                            <th class="align-middle">تقاضا</th>
+            `;
+            for (let j = 0; j < cols; j++) {
+                finalHTML += `<td>${demand[j].toLocaleString('fa')}</td>`;
+            }
+            finalHTML += `
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            `;
+            
+            document.getElementById('finalTable').innerHTML = finalHTML;
+            document.getElementById('totalCost').textContent = totalCost.toLocaleString('fa');
+            document.getElementById('transportation-result').style.display = 'block';
+            
+            // اسکرول به بخش نتایج
+            document.getElementById('transportation-result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // کد برای دکمه‌های اصلی
+        document.getElementById('simplexBtn').addEventListener('click', function() {
+            document.getElementById('simplexSection').style.display = 'block';
+            document.getElementById('transportationSection').style.display = 'none';
+            document.getElementById('networkFlowSection').style.display = 'none';
+            document.getElementById('graphSection').style.display = 'none';
+            
+            // تغییر ظاهر دکمه‌ها
+            resetButtonStyles();
+            this.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+        });
+        
+        document.getElementById('transportationBtn').addEventListener('click', function() {
+            document.getElementById('simplexSection').style.display = 'none';
+            document.getElementById('transportationSection').style.display = 'block';
+            document.getElementById('networkFlowSection').style.display = 'none';
+            document.getElementById('graphSection').style.display = 'none';
+            
+            // تغییر ظاهر دکمه‌ها
+            resetButtonStyles();
+            this.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+        });
+        
+        document.getElementById('networkFlowBtn').addEventListener('click', function() {
+            document.getElementById('simplexSection').style.display = 'none';
+            document.getElementById('transportationSection').style.display = 'none';
+            document.getElementById('networkFlowSection').style.display = 'block';
+            document.getElementById('graphSection').style.display = 'none';
+            
+            // تغییر ظاهر دکمه‌ها
+            resetButtonStyles();
+            this.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+        });
+        
+        document.getElementById('graphBtn').addEventListener('click', function() {
+            document.getElementById('simplexSection').style.display = 'none';
+            document.getElementById('transportationSection').style.display = 'none';
+            document.getElementById('networkFlowSection').style.display = 'none';
+            document.getElementById('graphSection').style.display = 'block';
+            
+            // تغییر ظاهر دکمه‌ها
+            resetButtonStyles();
+            this.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+        });
+        
+        function resetButtonStyles() {
+            const buttons = document.querySelectorAll('.main-btn, .network-flow-btn');
+            buttons.forEach(button => {
+                if (button.classList.contains('main-btn')) {
+                    button.style.background = 'linear-gradient(to right, var(--primary-color), var(--secondary-color))';
+                } else if (button.classList.contains('network-flow-btn')) {
+                    button.style.background = 'linear-gradient(to right, #9b59b6, #8e44ad)';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
