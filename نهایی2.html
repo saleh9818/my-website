@@ -369,6 +369,8 @@
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
             border: var(--glass-border);
+            position: relative;
+            overflow: hidden;
         }
         
         .node.supply {
@@ -625,6 +627,102 @@
             color: #2ecc71;
         }
         
+        /* استایل‌های جدید برای گراف شبکه پویا */
+        .network-graph {
+            width: 100%;
+            height: 500px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .graph-node {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            transition: all 0.3s ease;
+            text-align: center;
+            cursor: pointer;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .graph-node.supply {
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+        }
+        
+        .graph-node.demand {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+        }
+        
+        .graph-node.normal {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        }
+        
+        .graph-node:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .graph-edge {
+            position: absolute;
+            background: #7f8c8d;
+            z-index: 5;
+            transform-origin: 0 0;
+            height: 3px;
+        }
+        
+        .graph-edge-label {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            z-index: 15;
+        }
+        
+        .graph-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .flow-animation {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f39c12;
+            border-radius: 50%;
+            z-index: 20;
+            animation: flowAlong 3s linear infinite;
+        }
+        
+        .node-label {
+            font-size: 0.8rem;
+            margin-top: 2px;
+            opacity: 0.9;
+        }
+        
+        .node-supply, .node-demand {
+            font-size: 0.7rem;
+            margin-top: 2px;
+            opacity: 0.8;
+        }
+        
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -644,8 +742,15 @@
         
         @keyframes float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-5px); }
             100% { transform: translateY(0px); }
+        }
+        
+        @keyframes flowAlong {
+            0% { transform: translateX(0) translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateX(var(--end-x)) translateY(var(--end-y)); opacity: 0; }
         }
         
         .floating {
@@ -693,6 +798,16 @@
             .path-cost {
                 margin-top: 5px;
                 align-self: flex-end;
+            }
+            
+            .graph-node {
+                width: 60px;
+                height: 60px;
+                font-size: 0.9rem;
+            }
+            
+            .node-label {
+                font-size: 0.7rem;
             }
         }
     </style>
@@ -880,7 +995,7 @@
                     <div class="row g-3">
                         <div class="col-md-4">
                             <label for="nf-node-count" class="form-label">تعداد گره‌ها</label>
-                            <input type="number" id="nf-node-count" min="2" max="20" value="5" class="form-control persian-input">
+                            <input type="number" id="nf-node-count" min="2" max="20" value="6" class="form-control persian-input">
                         </div>
                         <div class="col-md-4">
                             <label for="nf-source-node" class="form-label">گره مبدأ (عرضه)</label>
@@ -890,6 +1005,7 @@
                                 <option value="3">گره 3</option>
                                 <option value="4">گره 4</option>
                                 <option value="5">گره 5</option>
+                                <option value="6">گره 6</option>
                             </select>
                         </div>
                         <div class="col-md-4">
@@ -931,10 +1047,19 @@
                     <i class="fas fa-network-wired me-2"></i>نمایش شبکه
                 </div>
                 <div class="card-body">
-                    <div class="network-display">
-                        <div id="network-visual">
-                            <!-- Network visualization will be dynamically generated here -->
-                        </div>
+                    <div class="network-graph" id="network-graph">
+                        <!-- Network graph visualization will be dynamically generated here -->
+                    </div>
+                    <div class="graph-controls">
+                        <button id="animateFlowBtn" class="btn persian-btn">
+                            <i class="fas fa-play me-2"></i>شبیه‌سازی جریان
+                        </button>
+                        <button id="resetGraphBtn" class="btn persian-btn">
+                            <i class="fas fa-redo me-2"></i>بازنشانی نمایش
+                        </button>
+                        <button id="layoutGraphBtn" class="btn persian-btn">
+                            <i class="fas fa-project-diagram me-2"></i>تنظیم مجدد گراف
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1042,12 +1167,17 @@
             const nfArcsContainer = document.getElementById('nf-arcs-container');
             const nfCalculateBtn = document.getElementById('nf-calculate-btn');
             const nfDummyNodeBtn = document.getElementById('nf-dummy-node-btn');
-            const networkVisual = document.getElementById('network-visual');
+            const networkGraph = document.getElementById('network-graph');
             const networkFlowResult = document.getElementById('network-flow-result');
             const networkAllPathsDiv = document.getElementById('network-all-paths');
             const optimalFlowDiv = document.getElementById('optimal-flow');
             const totalFlowCostDiv = document.getElementById('total-flow-cost');
             const dummySupplyNodesContainer = document.getElementById('dummy-supply-nodes-container');
+            
+            // کنترل‌های گراف شبکه
+            const animateFlowBtn = document.getElementById('animateFlowBtn');
+            const resetGraphBtn = document.getElementById('resetGraphBtn');
+            const layoutGraphBtn = document.getElementById('layoutGraphBtn');
             
             let nodeCount = 6;
             let edges = [];
@@ -1055,11 +1185,14 @@
             let allPaths = [];
             
             // متغیرهای بخش جریان در شبکه
-            let nfNodeCount = 5;
+            let nfNodeCount = 6;
             let arcs = [];
             let demandNodes = [];
             let supplyNodes = [];
             let dummySupplyNodes = [];
+            let graphNodes = [];
+            let graphEdges = [];
+            let animationInterval = null;
             
             // Initialize the applications
             initializeNodeSelects();
@@ -1071,7 +1204,7 @@
             initializeNFNodeSelects();
             generateNFDemandNodes();
             generateNFArcsInputs();
-            updateNetworkVisual();
+            updateNetworkGraph();
             
             // Event listeners for simplex section
             nodeCountInput.addEventListener('change', function() {
@@ -1095,11 +1228,16 @@
                 initializeNFNodeSelects();
                 generateNFDemandNodes();
                 generateNFArcsInputs();
-                updateNetworkVisual();
+                updateNetworkGraph();
             });
             
             nfCalculateBtn.addEventListener('click', calculateOptimalFlow);
             nfDummyNodeBtn.addEventListener('click', addNFDummyNode);
+            
+            // Event listeners for graph controls
+            animateFlowBtn.addEventListener('click', toggleFlowAnimation);
+            resetGraphBtn.addEventListener('click', resetGraphView);
+            layoutGraphBtn.addEventListener('click', updateNetworkGraph);
             
             // Functions for simplex section
             function initializeNodeSelects() {
@@ -1763,58 +1901,229 @@
                 nfArcsContainer.appendChild(grid);
             }
             
-            function updateNetworkVisual() {
-                networkVisual.innerHTML = '';
+            function updateNetworkGraph() {
+                networkGraph.innerHTML = '';
+                graphNodes = [];
+                graphEdges = [];
                 
-                // Create a simple visual representation of nodes
+                // Collect nodes information
+                const sourceNode = parseInt(nfSourceNodeSelect.value);
+                
+                // Create nodes
                 for (let i = 1; i <= nfNodeCount; i++) {
-                    const node = document.createElement('div');
-                    node.className = 'node';
+                    let nodeType = 'normal';
+                    let supply = 0;
+                    let demand = 0;
                     
-                    // Check if node is source
-                    if (i === parseInt(nfSourceNodeSelect.value)) {
-                        node.classList.add('supply');
+                    if (i === sourceNode) {
+                        nodeType = 'supply';
+                        supply = parseInt(nfSourceSupplyInput.value) || 0;
+                    } else if (dummySupplyNodes.includes(i)) {
+                        nodeType = 'supply';
+                        const supplyInput = document.getElementById(`dummy-supply-${i}`);
+                        supply = supplyInput ? parseInt(supplyInput.value) || 0 : 0;
+                    } else {
+                        // Check if it's a demand node
+                        const demandCheckbox = document.getElementById(`demand-${i}`);
+                        if (demandCheckbox && demandCheckbox.checked) {
+                            nodeType = 'demand';
+                            const demandInput = document.getElementById(`demand-value-${i}`);
+                            demand = demandInput ? parseInt(demandInput.value) || 0 : 0;
+                        }
                     }
                     
-                    // Check if node is dummy supply
-                    if (dummySupplyNodes.includes(i)) {
-                        node.classList.add('supply');
-                    }
-                    
-                    // Check if node is demand
-                    const demandCheckbox = document.getElementById(`demand-${i}`);
-                    if (demandCheckbox && demandCheckbox.checked) {
-                        node.classList.add('demand');
-                    }
-                    
-                    node.textContent = i;
-                    networkVisual.appendChild(node);
-                    
-                    // Add edge representation if not the last node
-                    if (i < nfNodeCount) {
-                        const edge = document.createElement('div');
-                        edge.className = 'edge';
-                        
-                        const cost = document.createElement('span');
-                        cost.className = 'edge-cost';
-                        cost.textContent = '?';
-                        
-                        const capacity = document.createElement('span');
-                        capacity.className = 'capacity';
-                        capacity.textContent = '∞';
-                        
-                        edge.appendChild(cost);
-                        edge.appendChild(capacity);
-                        networkVisual.appendChild(edge);
-                    }
+                    graphNodes.push({
+                        id: i,
+                        type: nodeType,
+                        supply: supply,
+                        demand: demand
+                    });
                 }
                 
+                // Collect arcs information
+                const arcInputs = document.querySelectorAll('#nf-arcs-container .form-check-input:checked');
+                
+                arcInputs.forEach(checkbox => {
+                    const from = parseInt(checkbox.dataset.from);
+                    const to = parseInt(checkbox.dataset.to);
+                    const costInput = document.getElementById(`arc-cost-${from}-${to}`);
+                    const capacityInput = document.getElementById(`arc-capacity-${from}-${to}`);
+                    
+                    const cost = costInput.value ? parseInt(costInput.value) : 0;
+                    const capacity = capacityInput.value ? parseInt(capacityInput.value) : Infinity;
+                    
+                    graphEdges.push({ from, to, cost, capacity });
+                });
+                
+                // Calculate positions for nodes (avoid overlapping)
+                calculateNetworkPositions();
+                
+                // Draw edges
+                graphEdges.forEach(edge => {
+                    const fromNode = graphNodes.find(n => n.id === edge.from);
+                    const toNode = graphNodes.find(n => n.id === edge.to);
+                    
+                    if (fromNode && toNode) {
+                        const length = Math.sqrt(Math.pow(toNode.x - fromNode.x, 2) + Math.pow(toNode.y - fromNode.y, 2));
+                        const angle = Math.atan2(toNode.y - fromNode.y, toNode.x - fromNode.x) * 180 / Math.PI;
+                        
+                        const edgeElement = document.createElement('div');
+                        edgeElement.className = 'graph-edge';
+                        edgeElement.style.width = `${length}px`;
+                        edgeElement.style.left = `${fromNode.x}px`;
+                        edgeElement.style.top = `${fromNode.y}px`;
+                        edgeElement.style.transform = `rotate(${angle}deg)`;
+                        
+                        networkGraph.appendChild(edgeElement);
+                        
+                        // Add edge label
+                        const label = document.createElement('div');
+                        label.className = 'graph-edge-label';
+                        label.textContent = `C:${edge.cost} U:${edge.capacity === Infinity ? '∞' : edge.capacity}`;
+                        label.style.left = `${(fromNode.x + toNode.x) / 2}px`;
+                        label.style.top = `${(fromNode.y + toNode.y) / 2 - 15}px`;
+                        
+                        networkGraph.appendChild(label);
+                    }
+                });
+                
+                // Draw nodes
+                graphNodes.forEach(node => {
+                    const nodeElement = document.createElement('div');
+                    nodeElement.className = `graph-node ${node.type}`;
+                    nodeElement.innerHTML = `
+                        <div>${node.id}</div>
+                        <div class="node-label">${node.type === 'supply' ? 'عرضه' : node.type === 'demand' ? 'تقاضا' : 'عادی'}</div>
+                        ${node.supply > 0 ? `<div class="node-supply">${node.supply}</div>` : ''}
+                        ${node.demand > 0 ? `<div class="node-demand">${node.demand}</div>` : ''}
+                    `;
+                    nodeElement.style.left = `${node.x - 35}px`;
+                    nodeElement.style.top = `${node.y - 35}px`;
+                    nodeElement.dataset.id = node.id;
+                    
+                    // Add animation with delay for cascade effect
+                    const delay = node.id * 100;
+                    nodeElement.style.animationDelay = `${delay}ms`;
+                    
+                    nodeElement.addEventListener('click', function() {
+                        highlightGraphNode(this.dataset.id);
+                    });
+                    
+                    networkGraph.appendChild(nodeElement);
+                });
+                
                 // Add a message if no arcs are defined
-                if (nfNodeCount > 0) {
+                if (graphEdges.length === 0) {
                     const message = document.createElement('p');
                     message.className = 'text-center mt-3 text-muted';
                     message.textContent = 'کمان‌ها و پارامترها را در بخش بالا تعریف کنید';
-                    networkVisual.appendChild(message);
+                    networkGraph.appendChild(message);
+                }
+            }
+            
+            function calculateNetworkPositions() {
+                // Simple circular layout with proper spacing
+                const centerX = 300;
+                const centerY = 250;
+                const radius = 180;
+                
+                // Calculate positions in a circle
+                graphNodes.forEach((node, index) => {
+                    const angle = (2 * Math.PI * index) / graphNodes.length;
+                    node.x = centerX + radius * Math.cos(angle);
+                    node.y = centerY + radius * Math.sin(angle);
+                });
+            }
+            
+            function highlightGraphNode(nodeId) {
+                // Highlight the selected node
+                document.querySelectorAll('.graph-node').forEach(node => {
+                    node.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
+                });
+                
+                const selectedNode = document.querySelector(`.graph-node[data-id="${nodeId}"]`);
+                if (selectedNode) {
+                    selectedNode.style.boxShadow = '0 0 15px 5px rgba(243, 156, 18, 0.7)';
+                    
+                    // Highlight connected edges
+                    document.querySelectorAll('.graph-edge').forEach(edge => {
+                        edge.style.background = '#7f8c8d';
+                        edge.style.height = '3px';
+                    });
+                }
+            }
+            
+            function toggleFlowAnimation() {
+                if (animationInterval) {
+                    // Stop animation
+                    clearInterval(animationInterval);
+                    animationInterval = null;
+                    animateFlowBtn.innerHTML = '<i class="fas fa-play me-2"></i>شبیه‌سازی جریان';
+                    
+                    // Remove all flow animations
+                    document.querySelectorAll('.flow-animation').forEach(el => el.remove());
+                } else {
+                    // Start animation
+                    animateFlowBtn.innerHTML = '<i class="fas fa-stop me-2"></i>توقف شبیه‌سازی';
+                    
+                    // Create flow animations along edges
+                    graphEdges.forEach(edge => {
+                        const fromNode = graphNodes.find(n => n.id === edge.from);
+                        const toNode = graphNodes.find(n => n.id === edge.to);
+                        
+                        if (fromNode && toNode) {
+                            // Create flow animation for each edge
+                            createFlowAnimation(fromNode, toNode, edge);
+                        }
+                    });
+                    
+                    // Continue creating new flow animations
+                    animationInterval = setInterval(() => {
+                        graphEdges.forEach(edge => {
+                            const fromNode = graphNodes.find(n => n.id === edge.from);
+                            const toNode = graphNodes.find(n => n.id === edge.to);
+                            
+                            if (fromNode && toNode && Math.random() > 0.5) {
+                                createFlowAnimation(fromNode, toNode, edge);
+                            }
+                        });
+                    }, 3000);
+                }
+            }
+            
+            function createFlowAnimation(fromNode, toNode, edge) {
+                const flow = document.createElement('div');
+                flow.className = 'flow-animation';
+                
+                // Calculate animation properties
+                const deltaX = toNode.x - fromNode.x;
+                const deltaY = toNode.y - fromNode.y;
+                
+                flow.style.setProperty('--end-x', `${deltaX}px`);
+                flow.style.setProperty('--end-y', `${deltaY}px`);
+                
+                flow.style.left = `${fromNode.x}px`;
+                flow.style.top = `${fromNode.y}px`;
+                
+                networkGraph.appendChild(flow);
+                
+                // Remove the flow element after animation completes
+                setTimeout(() => {
+                    if (flow.parentNode) {
+                        flow.parentNode.removeChild(flow);
+                    }
+                }, 3000);
+            }
+            
+            function resetGraphView() {
+                // Reset the graph view
+                updateNetworkGraph();
+                
+                // Stop any running animation
+                if (animationInterval) {
+                    clearInterval(animationInterval);
+                    animationInterval = null;
+                    animateFlowBtn.innerHTML = '<i class="fas fa-play me-2"></i>شبیه‌سازی جریان';
                 }
             }
             
@@ -1912,6 +2221,9 @@
                 // Display results
                 displayOptimalFlow(solution.flow);
                 displayTotalFlowCost(solution.totalCost);
+                
+                // Update graph with flow information
+                updateNetworkGraphWithFlow(solution.flow);
                 
                 // Show result section
                 networkFlowResult.style.display = 'block';
@@ -2081,6 +2393,34 @@
                 `;
             }
             
+            function updateNetworkGraphWithFlow(flow) {
+                // Update edge labels to show flow
+                document.querySelectorAll('.graph-edge-label').forEach(label => {
+                    // Extract from and to nodes from the label's position or data
+                    // This is a simplified approach - in a real app, you'd store this information
+                    const text = label.textContent;
+                    const parts = text.split(' ');
+                    if (parts.length >= 2) {
+                        const costPart = parts[0]; // C:value
+                        const capacityPart = parts[1]; // U:value
+                        
+                        // Find the corresponding arc
+                        const cost = parseInt(costPart.split(':')[1]);
+                        const capacity = capacityPart.split(':')[1] === '∞' ? Infinity : parseInt(capacityPart.split(':')[1]);
+                        
+                        const arc = arcs.find(a => a.cost === cost && a.capacity === capacity);
+                        if (arc) {
+                            const arcKey = `${arc.from}-${arc.to}`;
+                            if (flow[arcKey] > 0) {
+                                label.textContent = `C:${cost} U:${capacity === Infinity ? '∞' : capacity} F:${flow[arcKey]}`;
+                                label.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+                                label.style.color = 'white';
+                            }
+                        }
+                    }
+                });
+            }
+            
             function addNFDummyNode() {
                 const sourceNode = parseInt(nfSourceNodeSelect.value);
                 const sourceSupply = parseInt(nfSourceSupplyInput.value);
@@ -2124,7 +2464,7 @@
                     initializeNFNodeSelects();
                     generateNFDemandNodes();
                     generateNFArcsInputs();
-                    updateNetworkVisual();
+                    updateNetworkGraph();
                     
                     // Set the new node as demand
                     const newDemandCheckbox = document.getElementById(`demand-${nfNodeCount}`);
@@ -2197,10 +2537,66 @@
                         }
                     }
                     
-                    updateNetworkVisual();
+                    updateNetworkGraph();
                 }
                 
                 alert('گره مجازی با موفقیت اضافه شد. اکنون می‌توانید مسئله را حل کنید.');
+            }
+
+            // کد برای دکمه‌های اصلی
+            document.getElementById('simplexBtn').addEventListener('click', function() {
+                document.getElementById('simplexSection').style.display = 'block';
+                document.getElementById('transportationSection').style.display = 'none';
+                document.getElementById('networkFlowSection').style.display = 'none';
+                document.getElementById('graphSection').style.display = 'none';
+                
+                // تغییر ظاهر دکمه‌ها
+                resetButtonStyles();
+                this.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+            });
+            
+            document.getElementById('transportationBtn').addEventListener('click', function() {
+                document.getElementById('simplexSection').style.display = 'none';
+                document.getElementById('transportationSection').style.display = 'block';
+                document.getElementById('networkFlowSection').style.display = 'none';
+                document.getElementById('graphSection').style.display = 'none';
+                
+                // تغییر ظاهر دکمه‌ها
+                resetButtonStyles();
+                this.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+            });
+            
+            document.getElementById('networkFlowBtn').addEventListener('click', function() {
+                document.getElementById('simplexSection').style.display = 'none';
+                document.getElementById('transportationSection').style.display = 'none';
+                document.getElementById('networkFlowSection').style.display = 'block';
+                document.getElementById('graphSection').style.display = 'none';
+                
+                // تغییر ظاهر دکمه‌ها
+                resetButtonStyles();
+                this.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+            });
+            
+            document.getElementById('graphBtn').addEventListener('click', function() {
+                document.getElementById('simplexSection').style.display = 'none';
+                document.getElementById('transportationSection').style.display = 'none';
+                document.getElementById('networkFlowSection').style.display = 'none';
+                document.getElementById('graphSection').style.display = 'block';
+                
+                // تغییر ظاهر دکمه‌ها
+                resetButtonStyles();
+                this.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+            });
+            
+            function resetButtonStyles() {
+                const buttons = document.querySelectorAll('.main-btn, .network-flow-btn');
+                buttons.forEach(button => {
+                    if (button.classList.contains('main-btn')) {
+                        button.style.background = 'linear-gradient(to right, var(--primary-color), var(--secondary-color))';
+                    } else if (button.classList.contains('network-flow-btn')) {
+                        button.style.background = 'linear-gradient(to right, #9b59b6, #8e44ad)';
+                    }
+                });
             }
         });
 
@@ -2453,62 +2849,6 @@
             
             // اسکرول به بخش نتایج
             document.getElementById('transportation-result').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // کد برای دکمه‌های اصلی
-        document.getElementById('simplexBtn').addEventListener('click', function() {
-            document.getElementById('simplexSection').style.display = 'block';
-            document.getElementById('transportationSection').style.display = 'none';
-            document.getElementById('networkFlowSection').style.display = 'none';
-            document.getElementById('graphSection').style.display = 'none';
-            
-            // تغییر ظاهر دکمه‌ها
-            resetButtonStyles();
-            this.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
-        });
-        
-        document.getElementById('transportationBtn').addEventListener('click', function() {
-            document.getElementById('simplexSection').style.display = 'none';
-            document.getElementById('transportationSection').style.display = 'block';
-            document.getElementById('networkFlowSection').style.display = 'none';
-            document.getElementById('graphSection').style.display = 'none';
-            
-            // تغییر ظاهر دکمه‌ها
-            resetButtonStyles();
-            this.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
-        });
-        
-        document.getElementById('networkFlowBtn').addEventListener('click', function() {
-            document.getElementById('simplexSection').style.display = 'none';
-            document.getElementById('transportationSection').style.display = 'none';
-            document.getElementById('networkFlowSection').style.display = 'block';
-            document.getElementById('graphSection').style.display = 'none';
-            
-            // تغییر ظاهر دکمه‌ها
-            resetButtonStyles();
-            this.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
-        });
-        
-        document.getElementById('graphBtn').addEventListener('click', function() {
-            document.getElementById('simplexSection').style.display = 'none';
-            document.getElementById('transportationSection').style.display = 'none';
-            document.getElementById('networkFlowSection').style.display = 'none';
-            document.getElementById('graphSection').style.display = 'block';
-            
-            // تغییر ظاهر دکمه‌ها
-            resetButtonStyles();
-            this.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
-        });
-        
-        function resetButtonStyles() {
-            const buttons = document.querySelectorAll('.main-btn, .network-flow-btn');
-            buttons.forEach(button => {
-                if (button.classList.contains('main-btn')) {
-                    button.style.background = 'linear-gradient(to right, var(--primary-color), var(--secondary-color))';
-                } else if (button.classList.contains('network-flow-btn')) {
-                    button.style.background = 'linear-gradient(to right, #9b59b6, #8e44ad)';
-                }
-            });
         }
     </script>
 </body>
